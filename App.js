@@ -1,67 +1,75 @@
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  ScrollView,
+  FlatList
+} from "react-native";
 
-
-import { StatusBar } from 'expo-status-bar';
-import { Button } from 'react-bootstrap';
-import { StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native/types_generated/index';
+import Item from "./src/components/Item.js";
 
 export default function App() {
   const [item, setItem] = useState("");
-  const [task,setTask] = useState([]);
+  const [task, setTask] = useState([]);
 
   function handleAddItem() {
-    console.log("item",item);
+    console.log("item", item);
     setTask([...task, item]);
-
   }
 
   function handleInputText(text) {
     setItem(text);
   }
   return (
-    <View style={inputStyles.container}>
-      <View>
-        <TextInput style={styles.input} placeholder="zadajte task" onChangeText={handleInputText} />
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="zadajte task"
+          onChangeText={handleInputText}
+        />
         <Button onPress={handleAddItem} title="Pridať task" />
       </View>
 
-      <View style={styles.udalosti}>
-    
-        {task.map((i) => {
-        (<Text>{i}</Text>)})}
-      </View>
+      <ScrollView style={styles.udalosti}>
+      <FlatList
+        data={task}
+        renderItem={({item}) => <Text>{item}</Text>}
+        keyExtractor={item => item.id}
+      />
+      </ScrollView>
     </View>
   );
 }
 
-const inputStyles  = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderWidth: 4,
-    margin: 2,
-    borderWidth: 4,
-
-
   },
 
-inputContainer: {
-   backgroundColor: '#48566f',
-   justifyContent: 'center',
-   alignItems: 'center',
-   flexDirection: 'row',
-},
+  inputContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
 
   input: {
     borderWidth: 3,
     borderRadius: 4,
-    borderColor: '#49071f',
-    padding: 10,
-    marginBottom: 20,
-    justifyContent: 'center',
+    borderColor: "#49071f",
+    width: "80%",
   },
 
   udalosti: {
-    backgroundColor: '#c453ad',
-    flex: 1,
+    flex: 3,
   },
+
+  inputStyles: {},
+  textItem: { padding: 10, backgroundColor: "red", margin: 4 },
 });
